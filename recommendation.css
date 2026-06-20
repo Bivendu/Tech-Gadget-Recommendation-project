@@ -1,0 +1,143 @@
+/* ---------------------- GENERAL ---------------------- */
+body {
+    font-family: 'Arial', sans-serif;
+    background: #f5f7fa;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+h1 {
+    text-align: center;
+    background: #2b59ff;
+    color: #fff;
+    padding: 25px 0;
+    margin: 0;
+    font-size: 28px;
+}
+
+/* ---------------------- CONTAINER ---------------------- */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 30px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+/* ---------------------- LABELS & SELECTS ---------------------- */
+label {
+    font-weight: 600;
+    display: block;
+    margin-top: 15px;
+}
+
+select {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0 20px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+select:focus {
+    outline: none;
+    border-color: #2b59ff;
+}
+
+/* ---------------------- BUTTON ---------------------- */
+button {
+    background: #2b59ff;
+    color: white;
+    padding: 14px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s, transform 0.2s;
+}
+
+button:hover {
+    background: #1b3dcc;
+    transform: scale(1.05);
+}
+
+/* ---------------------- PRODUCT LIST ---------------------- */
+.product-list {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+    opacity: 0;
+    transform: translateY(50px);
+    animation: slideUp 0.8s forwards;
+}
+
+/* ---------------------- PRODUCT CARD ---------------------- */
+.product {
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-align: center;
+}
+
+.product:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.product img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 12px;
+}
+
+.product h3 {
+    margin: 10px 0 6px 0;
+    font-size: 18px;
+    color: #2b59ff;
+}
+
+.product p {
+    font-size: 14px;
+    margin: 0;
+    color: #555;
+    line-height: 1.5;
+}
+
+/* ---------------------- ANIMATION ---------------------- */
+@keyframes slideUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ---------------------- RESPONSIVE ---------------------- */
+@media (max-width: 1024px) {
+    .product-list {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .product-list {
+        grid-template-columns: 1fr;
+    }
+    h1 {
+        font-size: 24px;
+        padding: 20px 0;
+    }
+    button {
+        padding: 12px 20px;
+        font-size: 15px;
+    }
+}

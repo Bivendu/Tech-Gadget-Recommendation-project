@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TechIntellect - Home</title>
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --primary:#0056b3;
+      --primary-dark:#003f7f;
+      --accent:#ffd700;
+      --bg:#f4f6fb;
+      --card-bg:#ffffff;
+      --muted:#555;
+      --success:#e9f7ef;
+      --danger:#f8d7da;
+      --radius:12px;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+      background:var(--bg);
+      color:#222;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    .navbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      background:var(--primary);
+      padding:16px 28px;
+      color:#fff;
+      box-shadow:0 2px 6px rgba(0,0,0,0.12);
+      position:sticky;
+      top:0;
+      z-index:50;
+    }
+    .brand{font-weight:700;font-size:1.15rem;letter-spacing:1px}
+    .nav-links a{
+      color:#fff;text-decoration:none;margin-left:16px;font-weight:600;opacity:0.98;
+    }
+    .nav-links a:hover{color:var(--accent)}
+
+    .nav-right {display:flex; align-items:center; gap:12px;}
+    .compare-count {background:rgba(255,255,255,0.12);padding:6px 10px;border-radius:20px;font-weight:700}
+
+    .cta-section{
+      background-image:url("https://www.apple.com/newsroom/images/product/mac/standard/Apple_new-macbookair-wallpaper-screen_11102020_big.jpg.large.jpg");
+      background-size:cover;background-position:center;
+      color:#fff;text-align:center;padding:78px 18px;position:relative;
+    }
+    .cta-section::before{
+      content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.32),rgba(0,0,0,0.45)); z-index:0;
+    }
+    .cta-inner{position:relative;z-index:2;max-width:1100px;margin:0 auto;padding:0 20px}
+    .cta-section h1{font-size:2.4rem;margin:0 0 8px;font-weight:700}
+    .cta-section p{margin:0 0 18px;font-size:1.02rem;opacity:0.95}
+    .cta-buttons{display:inline-flex;gap:10px}
+    .btn{padding:10px 16px;border-radius:10px;border:0;font-weight:700;cursor:pointer}
+    .btn.primary{background:var(--accent);color:#000}
+    .btn.secondary{background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.12)}
+
+    .container{width:92%;max-width:1200px;margin:26px auto 56px}
+    .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:12px}
+    h2{color:var(--primary);font-size:1.4rem;margin:0 0 12px;display:flex;align-items:center;justify-content:space-between}
+    .arrow{background:#00000010;padding:6px 8px;border-radius:50%;font-weight:700}
+
+    .search-wrap{display:flex;gap:8px;align-items:center}
+    .search-input{padding:8px 12px;border-radius:8px;border:1px solid #d0d7e3;min-width:220px}
+
+    .product-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+    .card{
+      background:var(--card-bg);padding:12px;border-radius:var(--radius);
+      box-shadow:0 6px 18px rgba(20,30,50,0.06);display:flex;flex-direction:column;justify-content:space-between;
+      transition:transform .18s ease,box-shadow .18s ease;
+    }
+    .card:hover{transform:translateY(-6px);box-shadow:0 10px 28px rgba(20,30,50,0.10)}
+    .card img{width:100%;height:150px;object-fit:contain;border-radius:8px;background:#fafafa}
+    .card h3{margin:10px 0 6px;font-size:1.02rem}
+    .card p.price{margin:0;color:var(--primary);font-weight:700}
+    .card p.desc{margin:8px 0 0;color:var(--muted);font-size:0.95rem}
+    .actions{display:flex;gap:8px;margin-top:12px}
+    .small-btn{flex:1;padding:9px;border-radius:8px;border:0;cursor:pointer;font-weight:600}
+    .small-btn.view{background:var(--primary);color:#fff}
+    .small-btn.compare{background:#00a3a3;color:#fff}
+
+    .recommender{
+      background:var(--card-bg);max-width:920px;margin:40px auto;padding:22px;border-radius:var(--radius);
+      box-shadow:0 8px 26px rgba(20,30,50,0.06);text-align:center;
+    }
+    textarea{width:100%;min-height:100px;padding:10px;border-radius:10px;border:1px solid #d0d7e3;font-size:15px;resize:vertical}
+    .recommend-btn{margin-top:12px;padding:10px 14px;border-radius:10px;border:0;background:var(--primary);color:#fff;font-weight:700;cursor:pointer}
+    .result{margin-top:12px;padding:10px;border-radius:10px;display:none;text-align:left}
+
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.5);display:none;align-items:center;justify-content:center;z-index:120}
+    .modal{width:92%;max-width:720px;background:var(--card-bg);border-radius:12px;padding:16px;box-shadow:0 10px 40px rgba(0,0,0,0.22)}
+    .modal .modal-body{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .modal .modal-body img{width:100%;height:200px;object-fit:contain;border-radius:8px;background:#fafafa}
+    .modal .modal-meta h3{margin:0 0 6px}
+    .modal .close-btn{background:#eee;border:0;padding:8px 12px;border-radius:8px;cursor:pointer}
+
+    footer{text-align:center;padding:20px;background:#eef1f6;color:var(--muted);font-size:0.95rem}
+
+    @media (max-width:760px){
+      .cta-section{padding:44px 12px}
+      .cta-section h1{font-size:1.6rem}
+      .modal .modal-body{grid-template-columns:1fr}
+      .modal .modal-body img{height:180px}
+      .nav-links {display:none}
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="brand">TechIntellect</div>
+    <div class="nav-right">
+      <div class="compare-count" id="compareCount">Compare: 0</div>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="categories.html">Categories</a>
+        <a href="comparison.html">Comparison</a>
+        <a href="recommendation.html">Recommendations</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="cta-section" aria-label="hero">
+    <div class="cta-inner">
+      <h1>Welcome to <span style="color:var(--accent)">TechIntellect</span></h1>
+      <p>Your trusted hub for unbiased tech reviews, product comparisons, and AI-powered suggestions.</p>
+      <div class="cta-buttons">
+        <button class="btn primary" onclick="location.href='recommendation.html'">Get Recommendation</button>
+        <button class="btn secondary" onclick="location.href='comparison.html'">Compare Products</button>
+      </div>
+    </div>
+  </section>
+
+  <main class="container" id="mainContainer">
+    <div class="toolbar">
+      <h2>Popular Products <a class="arrow" href="popular.html">➡</a></h2>
+      <div class="search-wrap">
+        <input id="searchInput" class="search-input" placeholder="Search products or category..." oninput="filterProducts()" />
+        <button onclick="clearSearch()" class="small-btn view" style="padding:8px 12px">Clear</button>
+      </div>
+    </div>
+    <div id="popularGrid" class="product-grid" aria-live="polite"></div>
+
+    <section style="margin-top:26px">
+      <h2>Suggested for You <a class="arrow" href="suggested.html">➡</a></h2>
+      <div id="suggestedGrid" class="product-grid" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <section class="recommender" aria-label="recommendation">
+    <h2>Find the Best Tech Products for You 🔍</h2>
+    <p style="margin:6px 0 12px">Try: “gaming laptop under 1000”, “compare iPhone 14 vs Samsung S23”.</p>
+    <textarea id="userInput" placeholder="Enter your preferences... (e.g. 'compare iPhone 14 vs Samsung S23')"></textarea>
+    <div style="display:flex;gap:10px;justify-content:center;margin-top:10px">
+      <button class="recommend-btn" onclick="recommendProduct()">Get Recommendation</button>
+      <button class="recommend-btn" onclick="clearInput()" style="background:#777">Clear</button>
+      <button class="recommend-btn" onclick="clearCompare()" style="background:#b30000">Clear Compare</button>
+    </div>
+    <div id="result" class="result"></div>
+  </section>
+
+  <footer>© 2025 TechIntellect | Designed for Smart Tech Consumers</footer>
+
+  <div id="modalBackdrop" class="modal-backdrop" role="dialog" aria-modal="true">
+    <div class="modal" role="document">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <strong>Product Details</strong>
+        <button class="close-btn" onclick="closeModal()">Close</button>
+      </div>
+      <div class="modal-body">
+        <img id="modalImg" src="" alt="Product image">
+        <div class="modal-meta">
+          <h3 id="modalTitle"></h3>
+          <p id="modalPrice" style="font-weight:700;color:var(--primary)"></p>
+          <p id="modalDesc" style="color:var(--muted)"></p>
+          <ul style="padding-left:18px;color:var(--muted);margin-top:10px">
+            <li id="modalCpu"></li>
+            <li id="modalRam"></li>
+            <li id="modalStorage"></li>
+            <li id="modalBattery"></li>
+            <li id="modalWarranty"></li>
+          </ul>
+          <div style="display:flex;gap:8px;margin-top:12px">
+            <button class="small-btn view" onclick="closeModal()">Close</button>
+            <button class="small-btn compare" id="modalCompareBtn">Add to Compare</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+const Products = [
+  { id:"lenovo-e14", name:"Lenovo ThinkPad E14", img:"https://p3-ofp.static.pub//fes/cms/2025/03/17/rhrujhvv506ok0urr6gpzsmnikpxyj169232.png", price:"₹52,999", desc:"Reliable business laptop with solid performance and build quality.", category:"Laptop", brand:"Lenovo", rating:"4.3", battery:"8 hours", cpu:"Intel Core i5 11th Gen", ram:"8 GB", storage:"512 GB SSD", weight:"1.59 kg", warranty:"1 Year" },
+  { id:"noise-watch", name:"Noise Smartwatch", img:"https://m.media-amazon.com/images/I/61xSTnSOkuL.AC.jpg", price:"₹2,999", desc:"Affordable smartwatch with fitness tracking and long battery life.", category:"Wearable", brand:"Noise", rating:"4.1", battery:"7 days", cpu:"N/A", ram:"N/A", storage:"N/A", weight:"45 g", warranty:"1 Year" },
+  { id:"dell-inspiron-15", name:"Dell Inspiron 15", img:"https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/notebooks/inspiron-notebooks/15-3520/media-gallery/notebook-inspiron-15-3520-black-gallery-4.psd?chrss=full&fmt=png-alpha&hei=402&pscan=auto&qlt=100%2C1&resMode=sharp2&scl=1&size=684%2C402&wid=684", price:"₹48,500", desc:"Everyday laptop for students and professionals.", category:"Laptop", brand:"Dell", rating:"4.2", battery:"7 hours", cpu:"Intel Core i5 11th Gen", ram:"8 GB", storage:"512 GB SSD", weight:"1.8 kg", warranty:"1 Year" },
+  { id:"jbl-flip6", name:"JBL Flip 6 Speaker", img:"https://m.media-amazon.com/images/I/61+Q6Rh3OQL.SL1500.jpg", price:"₹11,999", desc:"Portable Bluetooth speaker with rich audio and waterproof build.", category:"Audio", brand:"JBL", rating:"4.5", battery:"12 hours", cpu:"N/A", ram:"N/A", storage:"N/A", weight:"0.54 kg", warranty:"1 Year" },
+  { id:"asus-vivobook-16", name:"ASUS VivoBook 16", img:"https://laptopmedia.com/wp-content/uploads/2023/03/2-49-e1680262218120.jpg", price:"₹59,990", desc:"Large screen laptop with balanced specs for productivity.", category:"Laptop", brand:"ASUS", rating:"4.2", battery:"8.5 hours", cpu:"Intel Core i5 12th Gen", ram:"8 GB", storage:"512 GB SSD", weight:"1.9 kg", warranty:"1 Year" },
+  { id:"canon-3000d", name:"Canon EOS 3000D", img:"https://www.canon.com.au/-/media/images/canon/products/eos-3000d/1400x960-eos-3000d-body-front.ashx", price:"₹29,499", desc:"Entry-level DSLR for photography beginners.", category:"Camera", brand:"Canon", rating:"4.0", battery:"500 shots", cpu:"N/A", ram:"N/A", storage:"SD card", weight:"0.48 kg", warranty:"1 Year" }
+];
+
+const popularProducts = Products;
+
+const suggestedProducts = [
+  { id:"macbook-air-m1", name:"MacBook Air M1", img:"https://m.media-amazon.com/images/I/71TPda7cwUL.SL1500.jpg", price:"₹89,990", desc:"Efficient Apple laptop with excellent battery life.", category:"Laptop", brand:"Apple", rating:"4.7", battery:"15-18 hours", cpu:"Apple M1", ram:"8 GB", storage:"256 GB SSD", weight:"1.29 kg", warranty:"1 Year" },
+  { id:"samsung-s23", name:"Samsung Galaxy S23", img:"https://static1.xdaimages.com/wordpress/wp-content/uploads/2023/01/samsung-galaxy-s23.png", price:"₹74,999", desc:"Flagship smartphone with crisp display and strong performance.", category:"Phone", brand:"Samsung", rating:"4.6", battery:"18 hours", cpu:"Snapdragon 8 Gen", ram:"8 GB", storage:"128 GB", weight:"168 g", warranty:"1 Year" },
+  { id:"ipad-10", name:"Apple iPad 10th Gen", img:"https://www.apple.com/newsroom/images/product/ipad/standard/Apple-iPad-10th-gen-Liquid-Retina-display-221018_big.jpg.large.jpg", price:"₹44,999", desc:"Reliable tablet for entertainment and light productivity.", category:"Tablet", brand:"Apple", rating:"4.5", battery:"10 hours", cpu:"A14 Bionic", ram:"4 GB", storage:"64 GB", weight:"477 g", warranty:"1 Year" },
+  { id:"sony-wh1000xm5", name:"Sony WH-1000XM5", img:"https://m.media-amazon.com/images/I/61aUBxqc5PL.SL1500.jpg", price:"₹29,990", desc:"Industry-leading noise cancelling headphones.", category:"Audio", brand:"Sony", rating:"4.7", battery:"30 hours", cpu:"N/A", ram:"N/A", storage:"N/A", weight:"0.25 kg", warranty:"1 Year" },
+  { id:"logitech-mx3s", name:"Logitech MX Master 3S", img:"https://m.media-amazon.com/images/I/71E5zB1qbIL.SL1500.jpg", price:"₹9,499", desc:"Premium productivity mouse with ergonomic design.", category:"Accessories", brand:"Logitech", rating:"4.6", battery:"70 days", cpu:"N/A", ram:"N/A", storage:"N/A", weight:"0.141 kg", warranty:"1 Year" }
+];
+
+/* ---------- FIXED HELPERS ---------- */
+function escapeHtml(str){
+  if(!str) return "";
+  return String(str).replace(/[&<>"'\/=]/g, s => ({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":"&#39;",
+    '/':'&#x2F;',
+    '=':"&#x3D;"
+  })[s]);
+}
+
+function formatCardHTML(p){
+  return `
+    <div class="card" data-id="${p.id}">
+      <img src="${p.img}" alt="${escapeHtml(p.name)}">
+      <div>
+        <h3>${escapeHtml(p.name)}</h3>
+        <p class="price">${escapeHtml(p.price)}</p>
+        <p class="desc">${escapeHtml(p.desc)}</p>
+      </div>
+      <div class="actions" style="margin-top:auto">
+        <button class="small-btn view" onclick="openModal('${p.id}')">View Details</button>
+        <button class="small-btn compare" onclick="addToCompare('${p.id}')">Add to Compare</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderGrids(productsFilter = null){
+  const popularGrid = document.getElementById('popularGrid');
+  const suggestedGrid = document.getElementById('suggestedGrid');
+
+  if(productsFilter){
+    const lower = productsFilter.toLowerCase();
+    popularGrid.innerHTML = popularProducts
+      .filter(p => (p.name + ' ' + p.category + ' ' + p.brand).toLowerCase().includes(lower))
+      .map(formatCardHTML).join('');
+    suggestedGrid.innerHTML = suggestedProducts
+      .filter(p => (p.name + ' ' + p.category + ' ' + p.brand).toLowerCase().includes(lower))
+      .map(formatCardHTML).join('');
+  } else {
+    popularGrid.innerHTML = popularProducts.map(formatCardHTML).join('');
+    suggestedGrid.innerHTML = suggestedProducts.map(formatCardHTML).join('');
+  }
+
+  updateCompareCount();
+}
+
+/* ---------- MODAL ---------- */
+function openModal(id){
+  const product = [...popularProducts, ...suggestedProducts].find(p=>p.id===id);
+  if(!product) return;
+  document.getElementById('modalImg').src = product.img;
+  document.getElementById('modalTitle').textContent = product.name;
+  document.getElementById('modalPrice').textContent = product.price;
+  document.getElementById('modalDesc').textContent = product.desc;
+  document.getElementById('modalCpu').textContent = product.cpu ? ('Processor: ' + product.cpu) : '';
+  document.getElementById('modalRam').textContent = product.ram ? ('RAM: ' + product.ram) : '';
+  document.getElementById('modalStorage').textContent = product.storage ? ('Storage: ' + product.storage) : '';
+  document.getElementById('modalBattery').textContent = product.battery ? ('Battery: ' + product.battery) : '';
+  document.getElementById('modalWarranty').textContent = product.warranty ? ('Warranty: ' + product.warranty) : '';
+
+  document.getElementById('modalCompareBtn').onclick = () => addToCompare(product.id);
+  document.getElementById('modalBackdrop').style.display = 'flex';
+}
+
+function closeModal(){ document.getElementById('modalBackdrop').style.display = 'none'; }
+
+/* ---------- COMPARE STORAGE ---------- */
+function addToCompare(id){
+  const product = [...popularProducts, ...suggestedProducts].find(p=>p.id===id);
+  if(!product) { alert('Product not found'); return; }
+  const existing = JSON.parse(localStorage.getItem('productsToCompare') || '[]');
+  if(existing.some(e=>e.id===product.id)){
+    transientToast('Already added to compare'); return;
+  }
+  existing.push(product);
+  localStorage.setItem('productsToCompare', JSON.stringify(existing));
+  transientToast('Added to compare');
+  updateCompareCount();
+}
+
+function updateCompareCount(){
+  const existing = JSON.parse(localStorage.getItem('productsToCompare') || '[]');
+  document.getElementById('compareCount').textContent = 'Compare: ' + (existing.length || 0);
+}
+
+function transientToast(msg){
+  const result = document.getElementById('result');
+  result.style.display = 'block';
+  result.style.background = '#e6f7ff';
+  result.style.color = '#033548';
+  result.textContent = msg;
+  setTimeout(()=>{ result.style.display = 'none'; }, 1800);
+}
+
+function clearCompare(){
+  if(!confirm('Clear all compared products?')) return;
+  localStorage.removeItem('productsToCompare');
+  updateCompareCount();
+  transientToast('Compare cleared');
+}
+
+/* ---------- SEARCH / FILTER ---------- */
+function filterProducts(){
+  const q = document.getElementById('searchInput').value.trim();
+  if(!q) renderGrids(); else renderGrids(q);
+}
+function clearSearch(){
+  document.getElementById('searchInput').value = '';
+  renderGrids();
+}
+
+/* ---------- RECOMMENDER (FIXED STRING LITERALS) ---------- */
+function recommendProduct(){
+  const inputEl = document.getElementById('userInput');
+  const resultDiv = document.getElementById('result');
+  const query = inputEl.value.trim();
+  if(!query){
+    resultDiv.style.display='block';
+    resultDiv.style.background='var(--danger)';
+    resultDiv.textContent='⚠ Please enter your preferences.'; 
+    return;
+  }
+
+  const text = query.toLowerCase();
+
+  if(text.includes('compare') && text.includes('vs')){
+    const parts = text.replace('compare','').split('vs').map(s=>s.trim()).filter(Boolean);
+    const a = parts[0] || 'Item A';
+    const b = parts[1] || 'Item B';
+
+    const out = `📌 Comparison Result
+
+🔹 ${a.toUpperCase()}
+Performance: ⭐⭐⭐⭐☆
+Battery: ⭐⭐⭐⭐☆
+
+🔹 ${b.toUpperCase()}
+Performance: ⭐⭐⭐⭐⭐
+Battery: ⭐⭐⭐⭐☆
+
+💡 Verdict: ${b.toUpperCase()} is better overall.`;
+
+    displayResult(out);
+    return;
+  }
+
+  const priceMatch = text.match(/under\s*₹?(\d{2,6})|below\s*₹?(\d{2,6})|under\s*\$?(\d{2,6})/i);
+
+  if(text.includes('laptop')){
+    let out = "💻 Quick picks: Dell Inspiron, Lenovo IdeaPad, HP Pavilion.";
+    if(priceMatch){
+      const num = parseInt(priceMatch[1] || priceMatch[2] || priceMatch[3], 10);
+      if(num && num < 60000) out = "💻 Good budget laptops: Lenovo IdeaPad Slim, HP Pavilion, Dell Inspiron.";
+      else if(num && num >= 60000 && num < 100000) out = "💻 Mid-range: ASUS VivoBook, MacBook Air (base), Dell Inspiron higher configs.";
+    }
+    displayResult(out);
+    return;
+  }
+
+  if(text.includes('phone')){
+    displayResult("📱 Top picks: iPhone 14, Samsung S23, Pixel 8.");
+    return;
+  }
+
+  if(text.includes('camera')){
+    displayResult("📷 For beginners: Canon 2000D / 3000D. For enthusiasts: Canon EOS 90D or Sony a6400.");
+    return;
+  }
+
+  displayResult("🤔 Try: 'laptop under 60000', 'compare iPhone 14 vs Samsung S23', or mention a category (phone, camera, laptop).");
+}
+
+function displayResult(str){
+  const result = document.getElementById('result');
+  result.style.display = 'block';
+  result.style.background = 'var(--success)';
+  result.style.color = '#0b514b';
+  result.textContent = str;
+}
+
+/* ---------- BOOTSTRAP ---------- */
+renderGrids();
+updateCompareCount();
+
+document.getElementById('modalBackdrop').addEventListener('click', (e)=>{
+  if(e.target === document.getElementById('modalBackdrop')) closeModal();
+});
+
+function clearInput(){ document.getElementById('userInput').value=''; document.getElementById('result').style.display='none'; }
+</script>
+
+</body>
+</html>

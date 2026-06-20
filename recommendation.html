@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tech Recommender System</title>
+  <style>
+    /* ---------------------- GENERAL ---------------------- */
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f2f4f7;
+        margin: 0;
+        padding: 0;
+        color: #333;
+    }
+
+    h1 {
+        text-align: center;
+        background-color: #2b59ff;
+        color: #fff;
+        padding: 25px 0;
+        margin: 0;
+        font-size: 28px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    /* ---------------------- CONTAINER ---------------------- */
+    .container {
+        width: 90%;
+        max-width: 1000px;
+        margin: 30px auto;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    }
+
+    /* ---------------------- LABELS & SELECTS ---------------------- */
+    label {
+        font-weight: 600;
+        display: block;
+        margin-top: 15px;
+    }
+
+    select {
+        width: 100%;
+        padding: 12px;
+        margin: 8px 0 20px 0;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+        transition: border-color 0.3s;
+    }
+
+    select:focus {
+        outline: none;
+        border-color: #2b59ff;
+    }
+
+    /* ---------------------- BUTTON ---------------------- */
+    button {
+        background-color: #2b59ff;
+        color: white;
+        padding: 14px 25px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+        background-color: #1b3dcc;
+        transform: scale(1.05);
+    }
+
+    /* ---------------------- PRODUCT LIST ---------------------- */
+    .product-list {
+        margin-top: 30px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+        opacity: 0;
+        transform: translateY(50px);
+        animation: slideUp 0.8s forwards;
+    }
+
+    /* ---------------------- PRODUCT CARD ---------------------- */
+    .product {
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        transition: transform 0.3s, box-shadow 0.3s;
+        text-align: center;
+    }
+
+    .product:hover {
+        transform: translateY(-5px) scale(1.03);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    .product img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 12px;
+        margin-bottom: 12px;
+    }
+
+    .product h3 {
+        margin: 10px 0 6px 0;
+        font-size: 18px;
+        color: #2b59ff;
+    }
+
+    .product p {
+        font-size: 14px;
+        margin: 0;
+        color: #555;
+        line-height: 1.5;
+    }
+
+    /* ---------------------- ANIMATION ---------------------- */
+    @keyframes slideUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ---------------------- RESPONSIVE ---------------------- */
+    @media (max-width: 1024px) {
+        .product-list {
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        }
+    }
+
+    @media (max-width: 768px) {
+        .product-list {
+            grid-template-columns: 1fr;
+        }
+        h1 {
+            font-size: 24px;
+            padding: 20px 0;
+        }
+        button {
+            padding: 12px 20px;
+            font-size: 15px;
+        }
+        select {
+            font-size: 15px;
+        }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Tech Gadget Recommender System</h1>
+
+  <div class="container">
+    <label>Select Category:</label>
+    <select id="categorySelect">
+      <option value="">-- Choose Category --</option>
+      <option value="laptops">Laptops</option>
+      <option value="smartphones">Smartphones</option>
+      <option value="tablets">Tablets</option>
+      <option value="smartwatch">Smart Watches</option>
+      <option value="earbuds">Earbuds</option>
+      <option value="cameras">Cameras</option>
+    </select>
+    <div id="filters"></div>
+
+    <button onclick="recommend()">Get Recommendations</button>
+
+    <div id="results"></div>
+  </div>
+
+<script>
+// ---------------------- PRODUCT DATABASE ----------------------
+const products = {
+  laptops: [
+    { name: "Dell XPS 13", ram: "16GB", storage: "512GB", cpu: "i7", image: "https://upload.wikimedia.org/wikipedia/commons/4/4a/Dell_XPS_13_%282018%29_%2841207063792%29.jpg" },
+    { name: "MacBook Air M2", ram: "8GB", storage: "256GB", cpu: "M2", image: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/macbook-air-m2-2022-family?wid=1400&hei=1400&fmt=jpeg&qlt=80&.v=1662030537081" }
+  ],
+  smartphones: [
+    { name: "iPhone 15", ram: "6GB", storage: "128GB", camera: "48MP", image: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-select-2023-family?wid=940&hei=1112&fmt=png-alpha&.v=1691674677996" },
+    { name: "Samsung Galaxy S24 Ultra", ram: "12GB", storage: "256GB", camera: "200MP", image: "https://images.samsung.com/is/image/samsung/p6pim/in/sm-s928ezkginu/gallery/in-galaxy-s24-ultra-5g-s928-530399-sm-s928ezkginu-621018871?$720_576_PNG$" }
+  ],
+  tablets: [
+    { name: "iPad Pro 11", ram: "8GB", storage: "256GB", image: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/ipad-pro-11-select-2024?wid=940&hei=1112&fmt=png-alpha&.v=1712918822179" },
+    { name: "Samsung Galaxy Tab S9", ram: "12GB", storage: "256GB", image: "https://images.samsung.com/is/image/samsung/p6pim/in/galaxy-tab-s9-s920-530666-sm-s920nzkginu-813062057?$720_576_PNG$" }
+  ],
+  smartwatch: [
+    { name: "Apple Watch Series 9", battery: "18h", gps: "Yes", image: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/MKU33_VW_PF+watch-45-alum-starlight-cell-45?wid=940&hei=1112&fmt=png-alpha&.v=1690749962934" },
+    { name: "Samsung Galaxy Watch 6", battery: "40h", gps: "Yes", image: "https://images.samsung.com/is/image/samsung/p6pim/in/galaxy-watch6-sm-r920-530649-sm-r920nzkainu-857210294?$720_576_PNG$" }
+  ],
+  earbuds: [
+    { name: "Sony WF-1000XM5", anc: "Yes", battery: "32h", image: "https://www.sony.com/image/6f61d4a5ad1c974c8589be681ea2e963?fmt=png&wid=400&hei=400" },
+    { name: "AirPods Pro 2", anc: "Yes", battery: "30h", image: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/airpods-pro-2nd-gen-select-2022?wid=890&hei=890&fmt=png-alpha&.v=1658877698278" }
+  ],
+  cameras: [
+    { name: "Canon EOS R6", type: "Mirrorless", mp: "20MP", image: "https://static.bhphoto.com/images/images2500x2500/1599671328_1576777.jpg" },
+    { name: "Sony A7 IV", type: "Mirrorless", mp: "33MP", image: "https://www.sony.com/image/6bfaac2a0c825e5634a9532dc284fc80?fmt=png&wid=400&hei=400" }
+  ]
+};
+
+// ---------------------- FILTERS UI ----------------------
+document.getElementById("categorySelect").addEventListener("change", function(){
+  const val = this.value;
+  const filterDiv = document.getElementById("filters");
+  filterDiv.innerHTML = "";
+
+  if (val === "laptops") {
+    filterDiv.innerHTML = `
+      <label>Select RAM:</label>
+      <select id="ram">
+        <option>8GB</option>
+        <option>16GB</option>
+      </select>
+      <label>Select Storage:</label>
+      <select id="storage">
+        <option>256GB</option>
+        <option>512GB</option>
+      </select>
+    `;
+  } else if (val === "smartphones") {
+    filterDiv.innerHTML = `
+      <label>Minimum RAM:</label>
+      <select id="ram">
+        <option>6GB</option>
+        <option>8GB</option>
+        <option>12GB</option>
+      </select>
+    `;
+  } else if (val === "tablets") {
+    filterDiv.innerHTML = `
+      <label>Minimum RAM:</label>
+      <select id="ram">
+        <option>4GB</option>
+        <option>6GB</option>
+        <option>8GB</option>
+      </select>
+    `;
+  } else if (val === "smartwatch") {
+    filterDiv.innerHTML = `
+      <label>GPS Needed?</label>
+      <select id="gps">
+        <option>Yes</option>
+        <option>No</option>
+      </select>
+    `;
+  } else if (val === "earbuds") {
+    filterDiv.innerHTML = `
+      <label>ANC Required?</label>
+      <select id="anc">
+        <option>Yes</option>
+        <option>No</option>
+      </select>
+    `;
+  } else if (val === "cameras") {
+    filterDiv.innerHTML = `
+      <label>Camera Type:</label>
+      <select id="type">
+        <option>Mirrorless</option>
+        <option>DSLR</option>
+      </select>
+    `;
+  }
+});
+
+// ---------------------- RECOMMENDATION LOGIC ----------------------
+function recommend() {
+  const category = document.getElementById("categorySelect").value;
+  const resultDiv = document.getElementById("results");
+  if (!category) {
+    resultDiv.innerHTML = "<p>Please select a category.</p>";
+    return;
+  }
+
+  let filtered = products[category];
+
+  document.querySelectorAll("#filters select").forEach(f => {
+    const val = f.value;
+    const id = f.id;
+    filtered = filtered.filter(p => p[id] && p[id] == val);
+  });
+
+  if (filtered.length === 0) {
+    resultDiv.innerHTML = "<p>No products found with selected filters.</p>";
+    return;
+  }
+
+  let html = `<h2>Recommended Products</h2><div class='product-list'>`;
+
+  filtered.forEach(p => {
+    html += `
+      <div class="product">
+        <img src="${p.image}" alt="${p.name}">
+        <h3>${p.name}</h3>
+        <p>${JSON.stringify(p).replace(/{|}|"/g,"").replace(/,/g," • ")}</p>
+      </div>
+    `;
+  });
+
+  html += "</div>";
+  resultDiv.innerHTML = html;
+}
+</script>
+
+</body>
+</html>

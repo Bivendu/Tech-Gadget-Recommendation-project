@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TechIntellect – Categories</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Icons -->
+  <script src="https://unpkg.com/lucide-icons"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="categories.css" />
+</head>
+
+<body class="light">
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="brand">TechIntellect</div>
+
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="categories.html" class="active">Categories</a>
+      <a href="comparison.html">Comparison</a>
+      <a href="recommendation.html">Recommendations</a>
+      <a href="contact.html">Contact</a>
+    </div>
+
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" onclick="toggleTheme()">
+      <i data-lucide="sun" class="sun-icon"></i>
+      <i data-lucide="moon" class="moon-icon"></i>
+    </button>
+  </nav>
+
+  <!-- Search + Filter Section -->
+  <section class="search-section">
+    <input type="text" id="searchBox" placeholder="Search categories..." onkeyup="filterCategories()" />
+
+    <select id="filterSelect" onchange="filterCategories()">
+      <option value="all">All Categories</option>
+      <option value="phones">Smartphones</option>
+      <option value="laptops">Laptops</option>
+      <option value="accessories">Accessories</option>
+      <option value="gadgets">Gadgets</option>
+    </select>
+  </section>
+
+  <!-- Categories Section -->
+  <section class="section">
+    <h2 class="section-header">Browse by Category</h2>
+    <p class="section-sub">Explore expert reviews, comparisons, and curated suggestions across modern technology.</p>
+
+    <div class="category-list" id="categoryList">
+
+      <!-- Smartphones -->
+      <div class="category-card" data-category="phones">
+        <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9" alt="Smartphones" />
+        <h3>Smartphones</h3>
+        <p>Discover detailed reviews of the latest smartphones from top global brands.</p>
+        <button onclick="window.location.href='reviews.html'">Explore</button>
+      </div>
+
+      <!-- Laptops -->
+      <div class="category-card" data-category="laptops">
+        <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8" alt="Laptops" />
+        <h3>Laptops</h3>
+        <p>Compare laptops for work, gaming, creativity and professional productivity.</p>
+        <button onclick="window.location.href='reviews.html'">Explore</button>
+      </div>
+
+      <!-- Accessories -->
+      <div class="category-card" data-category="accessories">
+        <img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796" alt="Accessories" />
+        <h3>Accessories</h3>
+        <p>Explore reviews for headphones, smartwatches, wearables and top tech add-ons.</p>
+        <button onclick="window.location.href='reviews.html'">Explore</button>
+      </div>
+
+      <!-- Gadgets -->
+      <div class="category-card" data-category="gadgets">
+        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475" alt="Gadgets" />
+        <h3>Gadgets</h3>
+        <p>Browse unique and innovative gadgets designed to enhance your lifestyle.</p>
+        <button onclick="window.location.href='reviews.html'">Explore</button>
+      </div>
+
+    </div>
+  </section>
+
+<script>
+  // Theme Toggle
+  function toggleTheme() {
+    document.body.classList.toggle("dark");
+    document.body.classList.toggle("light");
+  }
+
+  // Search + Filter Function
+  function filterCategories() {
+    const searchValue = document.getElementById("searchBox").value.toLowerCase();
+    const filterValue = document.getElementById("filterSelect").value;
+    const cards = document.querySelectorAll(".category-card");
+
+    cards.forEach(card => {
+      const title = card.querySelector("h3").textContent.toLowerCase();
+      const category = card.dataset.category;
+
+      const matchesSearch = title.includes(searchValue);
+      const matchesFilter = filterValue === "all" || filterValue === category;
+
+      card.style.display = (matchesSearch && matchesFilter) ? "block" : "none";
+    });
+  }
+
+  lucide.createIcons();
+</script>
+
+</body>
+</html>

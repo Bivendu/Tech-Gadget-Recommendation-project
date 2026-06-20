@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TechReview - Contact</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+
+  <!-- CSS File -->
+  <link rel="stylesheet" href="contact.css" />
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="brand">TechIntellect</div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="categories.html">Categories</a>
+      <a href="comparison.html">Comparisons</a>
+      <a href="recommendation.html">Recommendations</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+  
+
+  <!-- Contact Section -->
+  <section class="section contact-section">
+    <h2 class="section-header">Contact Us</h2>
+    <p class="section-sub">We’d love to hear from you! Fill out the form below and our team will get back to you soon.</p>
+
+    <form class="contact-form" onsubmit="event.preventDefault(); alert('Message sent successfully!');">
+      <div class="form-group">
+        <input type="text" placeholder="Your Name" required />
+      </div>
+      <div class="form-group">
+        <input type="email" placeholder="Your Email" required />
+      </div>
+      <div class="form-group">
+        <textarea placeholder="Your Message" rows="5" required></textarea>
+      </div>
+      <button type="submit" class="btn primary">Send Message</button>
+    </form>
+  </section>
+</body>
+</html>
